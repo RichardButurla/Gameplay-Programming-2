@@ -1,11 +1,12 @@
 #include <iostream>
-#include <SFML/Window.hpp>
-#include <SFML/OpenGL.hpp>
 #include <GL/glew.h>
 #include <GL/wglew.h>
+#include <SFML/Window.hpp>
+#include <SFML/OpenGL.hpp>
 
 #include "MyVector3.h"
 #include "Matrix.h"
+
 
 using namespace std;
 using namespace sf;
@@ -22,80 +23,88 @@ public:
 	Game();
 	~Game();
 	void run();
+	void processEvents(Event event);
 private:
 	Window window;
-	bool isRunning = false;
+	bool isRunning = true;
 	void initialize();
 	void update();
-	void draw();
-	void processEvents(Event event);
+	void render();
 	void unload();
 
-	float rotation = 0.5f;
+	Clock clock;
+	Time elapsed;
+
 	static const int MAX_TRIANGLES = 12;
 	static const int MAX_TRIANGLE_POINTS = 3;
+
+	GLubyte triangles[MAX_TRIANGLES];
+	myVertex vertexes[MAX_TRIANGLES * 3];
+	/* Variable to hold the VBO identifier */
+	GLuint vbo[1];
+	GLuint index;
 
 	MyVector3 m_triangleCubePoints[MAX_TRIANGLES][MAX_TRIANGLE_POINTS]
 	{
 		{//front1
-			{1,0,-5},
-			{1,1,-5},
-			{1,1,-6},
+			{0.1,-0.1,0},
+			{0.1,0.1,0},
+			{0.1,0.1,0},
 		},
 		{//front2
-			{1,0,-5},
-			{1,1,-6},
-			{1,0,-6}
+			{0.1,-0.1,0},
+			{0.1,0.1,0},
+			{0.1,-0.1,0}
 		},
 		{//left1
-			{0,0,-5},
-			{1,0,-5},
-			{1,0,-6},
+			{-0.1,-0.1,0},
+			{0.1,-0.1,0},
+			{0.1,-0.1,0},
 		},
 		{//left2
-			{0,0,-5},
-			{1,0,-6},
-			{0,0,-6}
+			{-0.1,-0.1,0},
+			{0.1,-0.1,0},
+			{-0.1,-0.1,0}
 		},
 		{//right1
-			{1,1,-5},
-			{0,1,-5},
-			{0,1,-6},
+			{0.1,0.1,0},
+			{-0.1,0.1,0},
+			{-0.1,0.1,0},
 		},
 		{//right2
-			{1,1,-5},
-			{0,1,-6},
-			{1,1,-6}
+			{0.1,0.1,0},
+			{-0.1,0.1,0},
+			{0.1,0.1,0}
 		},
 		{//back1
-			{0,1,-5},
-			{0,0,-5},
-			{0,0,-6},
+			{-0.1,0.1,0},
+			{-0.1,-0.1,0},
+			{-0.1,-0.1,0},
 		},
 		{//back2
-			{0,1,-5},
-			{0,0,-6},
-			{0,1,-6}
+			{-0.1,0.1,0},
+			{-0.1,-0.1,0},
+			{-0.1,0.1,0}
 		},
 		{//top1
-			{1,0,-6},
-			{1,1,-6},
-			{0,1,-6},
+			{0.1,-0.1,0},
+			{0.1,0.1,0},
+			{-0.1,0.1,0},
 		},
 		{//top2
-			{1,0,-6},
-			{0,1,-6},
-			{0,0,-6}
+			{0.1,-0.1,0},
+			{-0.1,0.1,0},
+			{-0.1,-0.1,0}
 		},
 		{//bottom1
-			{1,0,-5},
-			{1,1,-5},
-			{0,1,-5},
+			{0.1,-0.1,0},
+			{0.1,0.1,0},
+			{-0.1,0.1,0},
 		},
 		{//bottom2
-			{1,0,-5},
-			{0,1,-5},
-			{0,0,-5}
+			{0.1,-0.1,0},
+			{-0.1,0.1,0},
+			{-0.1,-0.1,0}
 		},
 
 	};
@@ -111,6 +120,6 @@ private:
 	float colorsArray[MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3];
 	unsigned int vertexIndexArray[MAX_TRIANGLES * MAX_TRIANGLE_POINTS];
 
-	float rotationAngle = 0.05f;
-	 // ********************
+
+	float rotation = 0.5f;
 };
