@@ -4,18 +4,31 @@
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
 
-#include "MyVector3.h"
-#include "Matrix.h"
-
+#include <Vector3.h>
+#include <Matrix3.h>
 
 using namespace std;
 using namespace sf;
+using namespace gpp;
 
-typedef struct
+
+
+class myVector3
 {
-	float points[3];
-	float colorPoints[3];
-} myVertex;
+public:
+	myVector3(float t_x, float t_y, float t_z) : x(t_x), y(t_y), z(t_z)
+	{}
+
+	float x;
+	float y;
+	float z;
+};
+
+static const int MAX_TRIANGLE_POINTS = 3;
+static const int MAX_CUBE_POINTS = 8;
+static const int MAX_TRIANGLES = 12;
+static const int MAX_CUBE_FACES = 6;
+
 
 class Game
 {
@@ -23,10 +36,9 @@ public:
 	Game();
 	~Game();
 	void run();
-	void processEvents(Event event);
 private:
 	Window window;
-	bool isRunning = true;
+	bool isRunning = false;
 	void initialize();
 	void update();
 	void render();
@@ -35,91 +47,49 @@ private:
 	Clock clock;
 	Time elapsed;
 
-	static const int MAX_TRIANGLES = 12;
-	static const int MAX_TRIANGLE_POINTS = 3;
+	float rotationAngle = 0.0f;
 
-	GLubyte triangles[MAX_TRIANGLES];
-	myVertex vertexes[MAX_TRIANGLES * 3];
-	/* Variable to hold the VBO identifier */
-	GLuint vbo[1];
-	GLuint index;
-
-	MyVector3 m_triangleCubePoints[MAX_TRIANGLES][MAX_TRIANGLE_POINTS]
+    myVector3 vertexes[24]
 	{
-		{//front1
-			{0.1,-0.1,0},
-			{0.1,0.1,0},
-			{0.1,0.1,0},
-		},
-		{//front2
-			{0.1,-0.1,0},
-			{0.1,0.1,0},
-			{0.1,-0.1,0}
-		},
-		{//left1
-			{-0.1,-0.1,0},
-			{0.1,-0.1,0},
-			{0.1,-0.1,0},
-		},
-		{//left2
-			{-0.1,-0.1,0},
-			{0.1,-0.1,0},
-			{-0.1,-0.1,0}
-		},
-		{//right1
-			{0.1,0.1,0},
-			{-0.1,0.1,0},
-			{-0.1,0.1,0},
-		},
-		{//right2
-			{0.1,0.1,0},
-			{-0.1,0.1,0},
-			{0.1,0.1,0}
-		},
-		{//back1
-			{-0.1,0.1,0},
-			{-0.1,-0.1,0},
-			{-0.1,-0.1,0},
-		},
-		{//back2
-			{-0.1,0.1,0},
-			{-0.1,-0.1,0},
-			{-0.1,0.1,0}
-		},
-		{//top1
-			{0.1,-0.1,0},
-			{0.1,0.1,0},
-			{-0.1,0.1,0},
-		},
-		{//top2
-			{0.1,-0.1,0},
-			{-0.1,0.1,0},
-			{-0.1,-0.1,0}
-		},
-		{//bottom1
-			{0.1,-0.1,0},
-			{0.1,0.1,0},
-			{-0.1,0.1,0},
-		},
-		{//bottom2
-			{0.1,-0.1,0},
-			{-0.1,0.1,0},
-			{-0.1,-0.1,0}
-		},
-
+        // Front face
+        { -0.5f, -0.5f,  0.5f },
+        {  0.5f, -0.5f,  0.5f },
+        {  0.5f,  0.5f,  0.5f },
+        { -0.5f,  0.5f,  0.5f },
+        // Right face
+        {  0.5f, -0.5f,  0.5f },
+        {  0.5f, -0.5f, -0.5f },
+        {  0.5f,  0.5f, -0.5f },
+        {  0.5f,  0.5f,  0.5f },
+        // Back face
+        {  0.5f, -0.5f, -0.5f },
+        { -0.5f, -0.5f, -0.5f },
+        { -0.5f,  0.5f, -0.5f },
+        {  0.5f,  0.5f, -0.5f },
+        // Left face
+        { -0.5f, -0.5f, -0.5f },
+        { -0.5f, -0.5f,  0.5f },
+        { -0.5f,  0.5f,  0.5f },
+        { -0.5f,  0.5f, -0.5f },
+        // Top face
+        { -0.5f,  0.5f,  0.5f },
+        {  0.5f,  0.5f,  0.5f },
+        {  0.5f,  0.5f, -0.5f },
+        { -0.5f,  0.5f, -0.5f },
+        // Bottom face
+        { -0.5f, -0.5f, -0.5f },
+        {  0.5f, -0.5f, -0.5f },
+        {  0.5f, -0.5f,  0.5f },
+        { -0.5f, -0.5f,  0.5f }
 	};
 
-	MyVector3 m_triangleColors[MAX_TRIANGLE_POINTS]
+	myVector3 m_cubeColors[MAX_CUBE_FACES]
 	{
 		{1.0f, 0.0f, 0.0f},//V0(red)
 		{0.0f, 1.0f, 0.0f}, //V1(green)
 		{0.0f, 0.0f, 1.0f}, //V2(blue)
+		{1.0f, 1.0f, 0.0f}, //V2(blue)
+		{1.0f, 0.0f, 1.0f}, //V2(magenta)
+		{0.0f, 1.0f, 1.0f}, //V2(cyan)
 	};
-
-	float verticesArray[MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3];
-	float colorsArray[MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3];
-	unsigned int vertexIndexArray[MAX_TRIANGLES * MAX_TRIANGLE_POINTS];
-
-
-	float rotation = 0.5f;
 };

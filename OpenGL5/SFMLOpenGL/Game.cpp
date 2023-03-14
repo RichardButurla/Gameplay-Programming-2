@@ -21,7 +21,10 @@ void Game::run()
 
 		while (window.pollEvent(event))
 		{
-			processEvents(event);
+			if (event.type == Event::Closed)
+			{
+				isRunning = false;
+			}
 		}
 		update();
 		render();
@@ -29,237 +32,62 @@ void Game::run()
 
 }
 
-void Game::processEvents(Event event)
+typedef struct
 {
-	if (event.type == Event::Closed)
-	{
-		isRunning = false;
-	}
+	float coordinate[3];
+	float color[3];
+} Vertex;
 
-	MyVector3 moveVector{ 0,0,0 };
+Vertex vertex[MAX_CUBE_FACES * 4];
+GLubyte triangleIndexes[]
+{
+	// Front face
+	0, 1, 2,
+	2, 3, 0,
+	// Right face
+	4, 5, 6,
+	6, 7, 4,
+	// Back face
+	8, 9, 10,
+	10, 11, 8,
+	// Left face
+	12, 13, 14,
+	14, 15, 12,
+	// Top face
+	16, 17, 18,
+	18, 19, 16,
+	// Bottom face
+	20, 21, 22,
+	22, 23 ,20
+};
 
-	switch (event.type)
-	{
-	case sf::Event::Closed:
-		window.close();
-		break;
-	case sf::Event::KeyPressed:
-
-
-		MyMatrix xRotation;
-		MyMatrix yRotation;
-		MyMatrix zRotation;
-		MyMatrix scaleMatrix;
-
-		switch (event.key.code)
-		{
-		case sf::Keyboard::T:
-			yRotation = MyMatrix::rotationAntiClockwiseY(rotation);
-
-			for (int i = 0; i < 6; i++)
-			{
-
-				for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-				{
-					MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-					point = yRotation * point;
-					verticesArray[i] = point.x;
-					verticesArray[i + 1] = point.y;
-					verticesArray[i + 2] = point.z;
-				}
-
-			}
-
-			break;
-		case sf::Keyboard::Y:
-			yRotation = MyMatrix::rotationAntiClockwiseY(-rotation);
-
-			for (int i = 0; i < 6; i++)
-			{
-				for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-				{
-					MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-					point = yRotation * point;
-					verticesArray[i] = point.x;
-					verticesArray[i + 1] = point.y;
-					verticesArray[i + 2] = point.z;
-				}
-
-			}
-			break;
-
-		case sf::Keyboard::G:
-			xRotation = MyMatrix::rotationAntiClockwiseX(rotation);
-
-			for (int i = 0; i < 6; i++)
-			{
-				for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-				{
-					MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-					point = xRotation * point;
-					verticesArray[i] = point.x;
-					verticesArray[i + 1] = point.y;
-					verticesArray[i + 2] = point.z;
-				}
-
-			}
-			break;
-
-		case sf::Keyboard::H:
-			xRotation = MyMatrix::rotationAntiClockwiseX(-rotation);
-
-			for (int i = 0; i < 6; i++)
-			{
-				for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-				{
-					MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-					point = xRotation * point;
-					verticesArray[i] = point.x;
-					verticesArray[i + 1] = point.y;
-					verticesArray[i + 2] = point.z;
-				}
-
-			}
-			break;
-		case sf::Keyboard::V:
-			zRotation = MyMatrix::rotationAntiClockwiseZ(rotation);
-
-			for (int i = 0; i < 6; i++)
-			{
-				for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-				{
-					MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-					point = zRotation * point;
-					verticesArray[i] = point.x;
-					verticesArray[i + 1] = point.y;
-					verticesArray[i + 2] = point.z;
-				}
-
-			}
-			break;
-		case sf::Keyboard::B:
-			zRotation = MyMatrix::rotationAntiClockwiseZ(-rotation);
-
-			for (int i = 0; i < 6; i++)
-			{
-				for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-				{
-					MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-					point = zRotation * point;
-					verticesArray[i] = point.x;
-					verticesArray[i + 1] = point.y;
-					verticesArray[i + 2] = point.z;
-				}
-			}
-			break;
-
-		case sf::Keyboard::W:
-			moveVector = { 0,0.1,0 };
-			break;
-
-		case sf::Keyboard::A:
-			moveVector = { -0.1,0,0 };
-			break;
-
-		case sf::Keyboard::S:
-			moveVector = { 0,-0.1,0 };
-			break;
-
-		case sf::Keyboard::D:
-			moveVector = { 0.1,0,0 };
-			break;
-
-		case sf::Keyboard::I:
-			scaleMatrix = MyMatrix::scale(0.5);
-			for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-			{
-				MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-				point = scaleMatrix * point;
-				verticesArray[i] = point.x;
-				verticesArray[i + 1] = point.y;
-				verticesArray[i + 2] = point.z;
-			}
-			break;
-
-		case sf::Keyboard::O:
-			scaleMatrix = MyMatrix::scale(1.5);
-			for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-			{
-				MyVector3 point{ verticesArray[i],verticesArray[i + 1],verticesArray[i + 2] };
-				point = scaleMatrix * point;
-				verticesArray[i] = point.x;
-				verticesArray[i + 1] = point.y;
-				verticesArray[i + 2] = point.z;
-			}
-			break;
-
-		default:
-			break;
-		}
-
-		for (int i = 0; i < MAX_TRIANGLES * MAX_TRIANGLE_POINTS * 3; i += 3)
-		{
-			verticesArray[i] += moveVector.x;
-			verticesArray[i + 1] += moveVector.y;
-			verticesArray[i + 2] += moveVector.z;
-		}
-	}
-}
-
-
+/* Variable to hold the VBO identifier */
+GLuint vbo[1];
+GLuint index;
 
 void Game::initialize()
 {
+	isRunning = true;
+	int colorIndex = 0;
+	for (int i = 0; i < MAX_CUBE_FACES * 4; i++)
+	{
+		if (i % 4 == 0)
+		{
+			colorIndex++;
+		}
+		vertex[i].coordinate[0] = vertexes[i].x;
+		vertex[i].coordinate[1] = vertexes[i].y;
+		vertex[i].coordinate[2] = vertexes[i].z;
+
+		vertex[i].color[0] = m_cubeColors[colorIndex].x;
+		vertex[i].color[1] = m_cubeColors[colorIndex].y;
+		vertex[i].color[2] = m_cubeColors[colorIndex].z;
+	}
+	
+	
+
 	glewInit();
 
-	//initialise arrays
-	int arrayIndex = 0;
-	for (int i = 0; i < MAX_TRIANGLES; i++)
-	{
-		for (int j = 0; j < MAX_TRIANGLE_POINTS; j++) {
-
-			colorsArray[arrayIndex] = m_triangleColors[j].x;
-			verticesArray[arrayIndex] = m_triangleCubePoints[i][j].x;
-
-			arrayIndex++;
-
-
-			colorsArray[arrayIndex] = m_triangleColors[j].y;
-			verticesArray[arrayIndex] = m_triangleCubePoints[i][j].y;
-
-			arrayIndex++;
-
-
-			colorsArray[arrayIndex] = m_triangleColors[j].z;
-			verticesArray[arrayIndex] = m_triangleCubePoints[i][j].z;
-
-			arrayIndex++;
-
-		}
-	}
-
-	int maxIndexes = MAX_TRIANGLES * MAX_TRIANGLE_POINTS;
-	for (int i = 0; i < maxIndexes; i++)
-	{
-		vertexIndexArray[i] = i;
-	}
-
-	arrayIndex = 0;
-	for (int i = 0; i < MAX_TRIANGLES * 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			vertexes[i].points[j] = verticesArray[arrayIndex];
-			vertexes[i].colorPoints[j] = colorsArray[arrayIndex];
-			arrayIndex++;
-		}
-	}
-	for (int i = 0; i < MAX_TRIANGLES; i++)
-	{
-		triangles[i] = i;
-	}
-
-	
 	/* Create a new VBO using VBO id */
 	glGenBuffers(1, vbo);
 
@@ -267,30 +95,45 @@ void Game::initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 
 	/* Upload vertex data to GPU */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 72, vertexes, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 24, vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &index);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 72, triangles, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * 36, triangleIndexes, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 }
 
 void Game::update()
 {
 	elapsed = clock.getElapsedTime();
-	int arrayIndex = 0;
-	for (int i = 0; i < MAX_TRIANGLES * 3; i++)
+
+	if (elapsed.asSeconds() >= 1.0f)
 	{
-		for (int j = 0; j < 3; j++)
+		clock.restart();
+
+		if (!flip)
 		{
-			vertexes[i].points[j] = verticesArray[arrayIndex];
-			vertexes[i].colorPoints[j] = colorsArray[arrayIndex];
-			arrayIndex++;
+			flip = true;
+		}
+		else
+			flip = false;
+	}
+
+	if (flip)
+	{
+		rotationAngle += 0.005f;
+
+		if (rotationAngle > 360.0f)
+		{
+			rotationAngle -= 360.0f;
 		}
 	}
-	
+
+	//Change vertex data
+	vertex[4].coordinate[0] += -0.0001f;
+	//vertex[4].coordinate[1] += -0.0001f;
+	//vertex[4].coordinate[2] -= -0.0001f;
 
 	cout << "Update up" << endl;
 }
@@ -308,7 +151,7 @@ void Game::render()
 
 	/*	As the data positions will be updated by the this program on the
 		CPU bind the updated data to the GPU for drawing	*/
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 12, vertexes, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 24, vertex, GL_STATIC_DRAW);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -316,7 +159,7 @@ void Game::render()
 
 	glColorPointer(3, GL_FLOAT, sizeof(Vertex), (char*)NULL + 12);
 
-	/*	Draw Triangle from VBO	(set where to start from as VBO can contain 
+	/*	Draw Triangle from VBO	(set where to start from as VBO can contain
 		model compoents that are and are not to be drawn )	*/
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (char*)NULL + 0);
 	glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_BYTE, (char*)NULL + 0);
