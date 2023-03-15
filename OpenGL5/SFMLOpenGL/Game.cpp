@@ -104,6 +104,7 @@ void Game::initialize()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+
 void Game::update()
 {
 	elapsed = clock.getElapsedTime();
@@ -130,12 +131,63 @@ void Game::update()
 		}
 	}
 
-	glRotatef(-0.1, 1, 0.5, 1);
-	//Change vertex data
-	//vertex[4].coordinate[0] += -0.0001f;
-	//vertex[4].coordinate[1] += -0.0001f;
-	//vertex[4].coordinate[2] -= -0.0001f;
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+		glRotatef(-0.1, 1, 0, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	{
+		glRotatef(0.1, 1, 0, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		glRotatef(-0.1, 0, 1, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		glRotatef(0.1, 0, 1, 0);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+	{
+		glRotatef(-0.1, 0, 0, 1);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+	{
+		glRotatef(0.1, 0, 0, 1);
+	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
+	{
+		glScalef(1.01, 1.01, 1.01);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+	{
+		glScalef(0.99,0.99,0.99);
+	}
+
+	myVector3 moveVector(0,0,0);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		moveVector.y = 0.01;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	{
+		moveVector.x = -0.01;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		moveVector.y = -0.01;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		glTranslatef(0.01,0,0);
+	}
+	for (int i = 0; i < 24; i++)
+	{
+		vertex[i].coordinate[0] += moveVector.x;
+		vertex[i].coordinate[1] += moveVector.y;
+	}
 	cout << "Update up" << endl;
 }
 
