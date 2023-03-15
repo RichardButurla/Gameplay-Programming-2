@@ -95,7 +95,7 @@ void Game::initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 
 	/* Upload vertex data to GPU */
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 24, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * 32, vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &index);
@@ -130,8 +130,9 @@ void Game::update()
 		}
 	}
 
+	glRotatef(-0.1, 1, 0.5, 1);
 	//Change vertex data
-	vertex[4].coordinate[0] += -0.0001f;
+	//vertex[4].coordinate[0] += -0.0001f;
 	//vertex[4].coordinate[1] += -0.0001f;
 	//vertex[4].coordinate[2] -= -0.0001f;
 
@@ -162,7 +163,7 @@ void Game::render()
 	/*	Draw Triangle from VBO	(set where to start from as VBO can contain
 		model compoents that are and are not to be drawn )	*/
 	glVertexPointer(3, GL_FLOAT, sizeof(Vertex), (char*)NULL + 0);
-	glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_BYTE, (char*)NULL + 0);
+	glDrawElements(GL_TRIANGLES, 32, GL_UNSIGNED_BYTE, (char*)NULL + 0);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
