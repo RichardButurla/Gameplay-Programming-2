@@ -119,17 +119,7 @@ void Game::initialize()
 
 	////////////////////////////////////
 	/* Vertex Shader which would normally be loaded from an external file */
-	std::ifstream vertexFile("sharder.vert");
-	const char* vs_src = readFromFile(vertexFile);
-
-	//const char* vs_src = "#version 400\n\r"
-	//	"in vec4 sv_position;"
-	//	"in vec4 sv_color;"
-	//	"out vec4 color;"
-	//	"void main() {"
-	//	"	color = sv_color;"
-	//	"	gl_Position = sv_position;"
-	//	"}"; //Vertex Shader Src
+	const char* vs_src = readFromFile("shader.vert");
 
 	std::cout << "\nSetting Up Vertex Shader";
 
@@ -150,12 +140,7 @@ void Game::initialize()
 	}
 
 	/* Fragment Shader which would normally be loaded from an external file */
-	const char* fs_src = "#version 400\n\r"
-		"in vec4 color;"
-		"out vec4 fColor;"
-		"void main() {"
-		"	fColor = color + vec4(0.0f, 0.0f, 0.5f, 0.5f);"
-		"}"; //Fragment Shader Src
+	const char* fs_src = readFromFile("shader.frag");
 
 	std::cout << ("\nSetting Up Fragment Shader");
 
@@ -445,19 +430,31 @@ void Game::unload()
 	glDeleteBuffers(1, vbo);
 }
 
-const char* readFromFile(std::ifstream& t_file)
+const char* readFromFile(std::string t_fileName)
 {
+	std::ifstream file(t_fileName);
 	std::string string;
-	char* src;
-	if (!t_file.is_open())
-	{
-		while (!t_file.eof())
-		{
-			std::getline(t_file, string);
-		}
+	std::string fileText;
+	char* src = nullptr;
+	bool readVersionLine = false;
 
-		strcpy(src, string.c_str());
-		t_file.close();		
+	if (file.is_open())
+	{
+		while (!file.eof())
+		{
+			std::getline(file, string);
+			fileText += string;
+
+			//if we havent read the shader version file add a newline and return carriage char
+			if (readVersionLine == false) {
+				readVersionLine = true;
+				fileText += "\n\r";
+			}
+		}
+		src = new char[fileText.size() + 1];
+		std::strcpy(src, fileText.c_str());
+
+		file.close();
 	}
 	return src;
 }

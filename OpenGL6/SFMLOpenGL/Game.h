@@ -15,7 +15,7 @@ using namespace std;
 using namespace gpp;
 
 
-const char* readFromFile(std::ifstream& t_file);
+const char* readFromFile(std::string t_fileName);
 
 class myVector3
 {
