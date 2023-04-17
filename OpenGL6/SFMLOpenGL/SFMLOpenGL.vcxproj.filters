@@ -44,5 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+    <None Include="shader.vertex">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
