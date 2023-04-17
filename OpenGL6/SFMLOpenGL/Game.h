@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include <GL/glew.h>
 #include <GL/wglew.h>
 #include <SFML/Window.hpp>
@@ -12,6 +15,7 @@ using namespace std;
 using namespace gpp;
 
 
+const char* readFromFile(std::ifstream& t_file);
 
 class myVector3
 {

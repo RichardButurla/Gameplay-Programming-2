@@ -119,14 +119,17 @@ void Game::initialize()
 
 	////////////////////////////////////
 	/* Vertex Shader which would normally be loaded from an external file */
-	const char* vs_src = "#version 400\n\r"
-		"in vec4 sv_position;"
-		"in vec4 sv_color;"
-		"out vec4 color;"
-		"void main() {"
-		"	color = sv_color;"
-		"	gl_Position = sv_position;"
-		"}"; //Vertex Shader Src
+	std::ifstream vertexFile("sharder.vert");
+	const char* vs_src = readFromFile(vertexFile);
+
+	//const char* vs_src = "#version 400\n\r"
+	//	"in vec4 sv_position;"
+	//	"in vec4 sv_color;"
+	//	"out vec4 color;"
+	//	"void main() {"
+	//	"	color = sv_color;"
+	//	"	gl_Position = sv_position;"
+	//	"}"; //Vertex Shader Src
 
 	std::cout << "\nSetting Up Vertex Shader";
 
@@ -442,3 +445,19 @@ void Game::unload()
 	glDeleteBuffers(1, vbo);
 }
 
+const char* readFromFile(std::ifstream& t_file)
+{
+	std::string string;
+	char* src;
+	if (!t_file.is_open())
+	{
+		while (!t_file.eof())
+		{
+			std::getline(t_file, string);
+		}
+
+		strcpy(src, string.c_str());
+		t_file.close();		
+	}
+	return src;
+}
