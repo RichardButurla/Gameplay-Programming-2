@@ -11,6 +11,9 @@
 #include <MyVector3.h>
 #include <Matrix.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 using namespace std;
 using namespace gpp;
 
@@ -60,7 +63,7 @@ private:
         { -0.5f, -0.5f,  0.5f },
         {  0.5f, -0.5f,  0.5f },
         {  0.5f,  0.5f,  0.5f },
-        { -0.5f,  0.5f,  0.5f },
+        {  -0.5f,  0.5f,  0.5f  },
         // Right face
         {  0.5f, -0.5f,  0.5f },
         {  0.5f, -0.5f, -0.5f },

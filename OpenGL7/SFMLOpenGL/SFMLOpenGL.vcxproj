@@ -155,6 +155,7 @@ xcopy $(GLEW_SDK)\bin\Release\Win32 $(TargetDir) /C /Y</Command>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MyVector3.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
@@ -162,11 +163,18 @@ xcopy $(GLEW_SDK)\bin\Release\Win32 $(TargetDir) /C /Y</Command>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MyVector3.cpp" />
+    <ClCompile Include="stb_image.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="cube.tga" />
+    <Image Include="mapping.png" />
+    <Image Include="minecraft.tga" />
+    <Image Include="texture.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

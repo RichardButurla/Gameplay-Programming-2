@@ -27,6 +27,9 @@
     <ClInclude Include="MyVector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -41,6 +44,9 @@
     <ClCompile Include="MyVector3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stb_image.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -50,5 +56,13 @@
     <None Include="shader.frag">
       <Filter>Header Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="cube.tga" />
+    <Image Include="mapping.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="minecraft.tga" />
+    <Image Include="texture.tga" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,10 @@
 #version 400
 
+uniform sampler2D f_texture;
 in vec4 color;
+in vec2 texel;
 out vec4 fColor;
-void main() 
-{
-	fColor = color + vec4(0.0f, 0.0f, 0.5f, 0.5f);
+void main() {
+
+	fColor = texture(f_texture, texel.st);
 };
